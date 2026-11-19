@@ -32,9 +32,28 @@ function applyTheme(theme: Theme) {
   meta?.setAttribute('content', theme === 'dark' ? '#16181b' : '#f7f6f3');
 }
 
+/**
+ * The API base the key is sent to: an https:// origin (plus optional path), or plain http only for a
+ * local gateway (localhost / 127.0.0.1 / [::1]). Empty means the default. Returns null when not allowed.
+ */
+export function normalizeApiBase(input: string): string | null {
+  const raw = input.trim();
+  if (!raw) return config.defaultApiBase;
+  let u: URL;
+  try {
+    u = new URL(raw);
+  } catch {
+    return null;
+  }
+  const local = ['localhost', '127.0.0.1', '[::1]'].includes(u.hostname);
+  if (u.protocol !== 'https:' && !(u.protocol === 'http:' && local)) return null;
+  if (u.username || u.password || u.search || u.hash) return null;
+  return (u.origin + u.pathname).replace(/\/+$/, '');
+}
+
 export const useSettings = create<SettingsState>((set) => ({
   apiKey: local.get(K.key) ?? '',
-  apiBase: (local.get(K.base) || config.defaultApiBase).replace(/\/+$/, ''),
+  apiBase: normalizeApiBase(local.get(K.base) ?? '') ?? config.defaultApiBase,
   theme: local.get(K.theme) === 'dark' ? 'dark' : 'light',
   remoteMedia: local.get(K.media) === '1',
   setApiKey(key) {
@@ -47,7 +66,8 @@ export const useSettings = create<SettingsState>((set) => ({
     set({ apiKey: '' });
   },
   setApiBase(base) {
-    const v = (base.trim() || config.defaultApiBase).replace(/\/+$/, '');
+    const v = normalizeApiBase(base);
+    if (v === null) return;
     if (v === config.defaultApiBase) local.remove(K.base);
     else local.set(K.base, v);
     set({ apiBase: v });

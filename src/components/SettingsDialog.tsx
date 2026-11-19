@@ -3,7 +3,7 @@ import { useEffect, useRef, useState } from 'react';
 import { config } from '../config';
 import { MOCK_MODE } from '../lib/api';
 import { refreshAccount } from '../lib/runner';
-import { toast, useAccount, useSettings } from '../lib/store';
+import { normalizeApiBase, toast, useAccount, useSettings } from '../lib/store';
 import { useUI } from '../lib/ui';
 import { Badge, Button, Dialog, Label, Segmented, Toggle } from '../ui';
 
@@ -28,7 +28,10 @@ function SettingsBody({ focusKey, onDone }: { focusKey: boolean; onDone(): void 
     if (focusKey) keyRef.current?.focus();
   }, [focusKey]);
 
+  const baseInvalid = normalizeApiBase(base) === null;
+
   const saveKey = () => {
+    if (baseInvalid) return;
     s.setApiKey(key);
     if (base.trim() !== s.apiBase) s.setApiBase(base);
     if (key.trim()) {
@@ -73,7 +76,7 @@ function SettingsBody({ focusKey, onDone }: { focusKey: boolean; onDone(): void 
               {show ? <EyeOff className="size-4" /> : <Eye className="size-4" />}
             </button>
           </div>
-          <Button variant="primary" onClick={saveKey} disabled={!key.trim() || (key.trim() === s.apiKey && base.trim() === s.apiBase)}>
+          <Button variant="primary" onClick={saveKey} disabled={baseInvalid || !key.trim() || (key.trim() === s.apiKey && base.trim() === s.apiBase)}>
             Save
           </Button>
         </div>
@@ -144,12 +147,17 @@ function SettingsBody({ focusKey, onDone }: { focusKey: boolean; onDone(): void 
           value={base}
           spellCheck={false}
           onChange={(e) => setBase(e.target.value)}
-          onBlur={() => base.trim() !== s.apiBase && s.setApiBase(base)}
+          onBlur={() => !baseInvalid && base.trim() !== s.apiBase && s.setApiBase(base)}
           aria-label="API base URL"
+          aria-invalid={baseInvalid}
         />
-        <p className="mt-1 text-[12px] text-fg-subtle">
-          Default {config.defaultApiBase}. Point it at any gateway that speaks the same API.
-        </p>
+        {baseInvalid ? (
+          <p className="mt-1 text-[12px] text-bad">Use an https:// URL (plain http is allowed only for localhost). Your key is sent to this address.</p>
+        ) : (
+          <p className="mt-1 text-[12px] text-fg-subtle">
+            Default {config.defaultApiBase}. Point it at any gateway that speaks the same API. Your key is sent to this address.
+          </p>
+        )}
       </section>
     </div>
   );
