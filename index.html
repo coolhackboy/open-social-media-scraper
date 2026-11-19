@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
+    <title>__BRAND_NAME__ — open-source social media scraper</title>
+    <meta name="description" content="Free, open-source social media scraper for TikTok, X, Instagram, YouTube, Reddit, LinkedIn and 28 more platforms. Social listening and creator research in your browser with your own SocQ API key." />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="theme-color" content="#f7f6f3" />
+    <meta name="color-scheme" content="light dark" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="__BRAND_NAME__" />
+    <meta property="og:description" content="Open-source social media scraper and social listening studio. Bring your own SocQ API key; everything runs in your browser." />
+    <meta property="og:url" content="__SITE_URL__" />
+    <meta property="og:image" content="__OG_IMAGE__" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:image" content="__OG_IMAGE__" />
+    <link rel="canonical" href="__SITE_URL__" />
+    <style>
+      html { background: #f7f6f3; }
+      html[data-theme='dark'] { background: #16181b; }
+    </style>
+    <script>
+      // Apply the saved theme before first paint. Light is the default.
+      try {
+        if (localStorage.getItem('osms.theme') === 'dark') document.documentElement.dataset.theme = 'dark';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

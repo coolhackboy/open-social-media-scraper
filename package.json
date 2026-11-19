@@ -1,0 +1,71 @@
+{
+  "name": "open-social-media-scraper",
+  "version": "0.1.0",
+  "description": "Free, open-source social media scraper and social data studio for TikTok, X, Instagram, YouTube, Reddit, LinkedIn and 28 more platforms. Social listening and creator research in your browser, with no scrapers to maintain. Self-host in minutes.",
+  "license": "MIT",
+  "author": "SocQ (https://socq.ai)",
+  "homepage": "https://github.com/coolhackboy/open-social-media-scraper#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/coolhackboy/open-social-media-scraper.git"
+  },
+  "bugs": {
+    "url": "https://github.com/coolhackboy/open-social-media-scraper/issues"
+  },
+  "keywords": [
+    "social-media-scraper",
+    "tiktok-scraper",
+    "twitter-scraper",
+    "instagram-scraper",
+    "youtube-scraper",
+    "reddit-scraper",
+    "linkedin-scraper",
+    "social-listening",
+    "creator-research",
+    "web-scraping",
+    "social-media-api",
+    "socq",
+    "react",
+    "vite",
+    "self-hosted"
+  ],
+  "type": "module",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc -b && vite build",
+    "lint": "eslint .",
+    "preview": "vite preview",
+    "test": "node --experimental-strip-types --test scripts/*.test.mjs",
+    "catalog": "node scripts/build-catalog.mjs",
+    "catalog:check": "node scripts/check-catalog.mjs",
+    "fixtures": "node scripts/build-fixtures.mjs"
+  },
+  "dependencies": {
+    "@fontsource/ibm-plex-mono": "^5.2.6",
+    "@fontsource/ibm-plex-sans": "^5.2.6",
+    "clsx": "^2.1.1",
+    "idb-keyval": "^6.2.2",
+    "lucide-react": "^0.544.0",
+    "react": "^19.1.0",
+    "react-dom": "^19.1.0",
+    "zustand": "^5.0.8"
+  },
+  "devDependencies": {
+    "@eslint/js": "^9.25.0",
+    "@tailwindcss/vite": "^4.1.13",
+    "@types/react": "^19.1.2",
+    "@types/react-dom": "^19.1.2",
+    "@vitejs/plugin-react": "^4.4.1",
+    "eslint": "^9.25.0",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "eslint-plugin-react-refresh": "^0.4.19",
+    "globals": "^16.0.0",
+    "tailwindcss": "^4.1.13",
+    "typescript": "~5.8.3",
+    "typescript-eslint": "^8.30.1",
+    "vite": "^6.3.5"
+  }
+}

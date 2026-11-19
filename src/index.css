@@ -1,0 +1,245 @@
+@import 'tailwindcss';
+
+/*
+ * Design tokens. Light is the default theme; `html[data-theme='dark']` switches to dark.
+ * Everything in the UI uses these tokens (bg-surface, text-fg-muted, border-line, bg-accent…).
+ */
+:root {
+  --bg: #f7f6f3;
+  --surface: #ffffff;
+  --surface-2: #f2f0ec;
+  --surface-3: #e9e6e0;
+  --line: #e3dfd8;
+  --line-strong: #cfc9bf;
+  --fg: #1c1a17;
+  --fg-muted: #5b564f;
+  --fg-subtle: #827b72;
+
+  --accent: hsl(8 92% 58%);
+  /* Filled buttons use a deeper shade so white labels pass WCAG AA (4.5:1). */
+  --accent-strong: hsl(8 82% 48%);
+  --accent-hover: hsl(8 82% 43%);
+  --accent-ink: hsl(8 80% 42%);
+  --accent-soft: hsl(8 92% 58% / 0.1);
+  --accent-line: hsl(8 92% 58% / 0.35);
+  --accent-fg: #ffffff;
+
+  --ok: hsl(152 62% 32%);
+  --ok-soft: hsl(152 62% 36% / 0.12);
+  --warn: hsl(36 92% 36%);
+  --warn-soft: hsl(40 95% 50% / 0.16);
+  --bad: hsl(350 68% 44%);
+  --bad-soft: hsl(350 70% 50% / 0.1);
+  --info: hsl(214 70% 44%);
+  --info-soft: hsl(214 80% 52% / 0.1);
+
+  --code-bg: #faf9f7;
+  --shadow: 0 1px 2px rgb(40 30 20 / 0.06), 0 4px 16px rgb(40 30 20 / 0.06);
+  --shadow-lg: 0 2px 6px rgb(40 30 20 / 0.08), 0 16px 48px rgb(40 30 20 / 0.14);
+  color-scheme: light;
+}
+
+html[data-theme='dark'] {
+  --bg: #16181b;
+  --surface: #1d2024;
+  --surface-2: #24282d;
+  --surface-3: #2d3238;
+  --line: #30353b;
+  --line-strong: #414850;
+  --fg: #eceae6;
+  --fg-muted: #aaa59d;
+  --fg-subtle: #858079;
+
+  --accent: hsl(8 92% 60%);
+  --accent-strong: hsl(8 80% 50%);
+  --accent-hover: hsl(8 84% 56%);
+  --accent-ink: hsl(8 96% 70%);
+  --accent-soft: hsl(8 92% 60% / 0.14);
+  --accent-line: hsl(8 92% 60% / 0.4);
+  --accent-fg: #ffffff;
+
+  --ok: hsl(152 52% 56%);
+  --ok-soft: hsl(152 52% 50% / 0.14);
+  --warn: hsl(40 90% 62%);
+  --warn-soft: hsl(40 90% 55% / 0.14);
+  --bad: hsl(352 80% 68%);
+  --bad-soft: hsl(352 80% 60% / 0.14);
+  --info: hsl(214 85% 70%);
+  --info-soft: hsl(214 85% 60% / 0.14);
+
+  --code-bg: #191c1f;
+  --shadow: 0 1px 2px rgb(0 0 0 / 0.3), 0 4px 16px rgb(0 0 0 / 0.2);
+  --shadow-lg: 0 2px 6px rgb(0 0 0 / 0.35), 0 16px 48px rgb(0 0 0 / 0.4);
+  color-scheme: dark;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-line: var(--line);
+  --color-line-strong: var(--line-strong);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-accent-strong: var(--accent-strong);
+  --color-accent-hover: var(--accent-hover);
+  --color-accent-ink: var(--accent-ink);
+  --color-accent-soft: var(--accent-soft);
+  --color-accent-line: var(--accent-line);
+  --color-accent-fg: var(--accent-fg);
+  --color-ok: var(--ok);
+  --color-ok-soft: var(--ok-soft);
+  --color-warn: var(--warn);
+  --color-warn-soft: var(--warn-soft);
+  --color-bad: var(--bad);
+  --color-bad-soft: var(--bad-soft);
+  --color-info: var(--info);
+  --color-info-soft: var(--info-soft);
+  --color-code: var(--code-bg);
+  --font-sans: 'IBM Plex Sans', ui-sans-serif, system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  --shadow-card: var(--shadow);
+  --shadow-pop: var(--shadow-lg);
+}
+
+@layer base {
+  html,
+  body,
+  #root {
+    height: 100%;
+  }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--fg);
+    font-family: var(--font-sans);
+    font-size: 14px;
+    line-height: 1.45;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+  ::selection {
+    background: var(--accent-soft);
+    color: inherit;
+  }
+  :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 1px;
+    border-radius: 4px;
+  }
+  button,
+  [role='button'] {
+    cursor: pointer;
+  }
+  button:disabled {
+    cursor: not-allowed;
+  }
+  input,
+  textarea,
+  select {
+    font: inherit;
+    color: inherit;
+  }
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--fg-subtle);
+  }
+  code,
+  kbd,
+  pre {
+    font-family: var(--font-mono);
+  }
+  table {
+    border-collapse: separate;
+    border-spacing: 0;
+  }
+}
+
+@layer components {
+  .field {
+    width: 100%;
+    border: 1px solid var(--line-strong);
+    background: var(--surface);
+    border-radius: 6px;
+    padding: 6px 9px;
+    min-height: 34px;
+    transition: border-color 0.12s, box-shadow 0.12s;
+  }
+  .field:hover {
+    border-color: color-mix(in oklab, var(--line-strong) 60%, var(--fg-subtle));
+  }
+  .field:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 3px var(--accent-soft);
+  }
+  .field[aria-invalid='true'] {
+    border-color: var(--bad);
+  }
+  select.field {
+    appearance: none;
+    padding-right: 28px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%23827b72' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 9px center;
+  }
+  .scroll-thin {
+    scrollbar-width: thin;
+    scrollbar-color: var(--line-strong) transparent;
+  }
+  .tabular {
+    font-variant-numeric: tabular-nums;
+  }
+  /* Faint ruled-paper pattern for empty states. */
+  .ruled {
+    background-image: linear-gradient(var(--line) 1px, transparent 1px);
+    background-size: 100% 28px;
+  }
+}
+
+html[data-theme='dark'] .mark {
+  --mark-l: 74%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes osms-spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes osms-pulse {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+@keyframes osms-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+}
+.animate-spin-slow {
+  animation: osms-spin 0.9s linear infinite;
+}
+.animate-pulse-soft {
+  animation: osms-pulse 1.4s ease-in-out infinite;
+}
+.animate-in {
+  animation: osms-in 0.18s ease-out both;
+}

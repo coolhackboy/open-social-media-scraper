@@ -1,0 +1,8 @@
+blank_issues_enabled: true
+contact_links:
+  - name: SocQ API documentation
+    url: https://docs.socq.ai/?utm_source=open-social-media-scraper&utm_medium=issue_template
+    about: Endpoint parameters, result schemas and pricing.
+  - name: Account, billing or API key questions
+    url: https://socq.ai/?utm_source=open-social-media-scraper&utm_medium=issue_template
+    about: Questions about your SocQ account are handled by SocQ support, not in this repository.
