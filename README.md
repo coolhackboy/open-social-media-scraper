@@ -300,4 +300,4 @@ without an API key.
 
 ## License
 
-[MIT](LICENSE) © 2026 PoYo AI · Fonts and icons: see [THIRD_PARTY.md](THIRD_PARTY.md).
+[MIT](LICENSE) © 2026 SocQ · Fonts and icons: see [THIRD_PARTY.md](THIRD_PARTY.md).
