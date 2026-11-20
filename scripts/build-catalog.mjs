@@ -81,6 +81,17 @@ const BILLING_NOTES = {
   'x/post-transcript': 'Videos longer than 2 minutes add 4 credits per minute; the estimate assumes a short video.',
 };
 
+/**
+ * Input rules the API enforces but the published schema does not state yet (found with real requests:
+ * `x/search` with results_limit 5 returns 422 "expected multiple of 20 between 20 and 2000").
+ * Merged into the field schema so forms and listening monitors send valid values. Remove an entry
+ * once the OpenAPI file carries the rule; the build reports entries that have become redundant.
+ */
+const INPUT_RULES = {
+  'x/search': { results_limit: { minimum: 20, maximum: 2000, multipleOf: 20 } },
+  'x/user-posts': { results_limit: { minimum: 20, maximum: 2000, multipleOf: 20 } },
+};
+
 const issues = [];
 const issue = (kind, msg) => issues.push({ kind, msg });
 
@@ -210,6 +221,15 @@ function makeEndpoint(id, op, meta) {
     billing: meta.billing,
     input: cleanSchema(body ?? { type: 'object', properties: {} }),
   };
+  for (const [field, rule] of Object.entries(INPUT_RULES[id] ?? {})) {
+    const f = ep.input.properties?.[field];
+    if (!f) {
+      issue('input-rules', `${id}: rule for unknown field ${field}`);
+      continue;
+    }
+    if (Object.entries(rule).every(([k, v]) => f[k] === v)) issue('input-rules', `${id}.${field}: schema already has this rule; remove the override`);
+    ep.input.properties[field] = { ...f, ...rule };
+  }
   if (BILLING_NOTES[id]) ep.billingNote = BILLING_NOTES[id];
   if (meta.source) ep.metaSource = meta.source;
   for (const field of [ep.billing.inputField, ep.billing.estimateInputField, ep.billing.estimateResultCountPerInputField]) {

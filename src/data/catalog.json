@@ -1,5 +1,5 @@
 {
- "generatedAt": "2026-11-19T14:48:58.526Z",
+ "generatedAt": "2026-11-20T02:26:00.225Z",
  "schemaVersion": "v1-87892a6484c2",
  "apiBase": "https://api.socq.ai",
  "creditUSD": 0.005,
@@ -16981,8 +16981,9 @@
     "properties": {
      "results_limit": {
       "type": "integer",
-      "minimum": 1,
-      "maximum": 2000
+      "minimum": 20,
+      "maximum": 2000,
+      "multipleOf": 20
      },
      "usernames": {
       "type": "array",
@@ -17037,8 +17038,9 @@
      },
      "results_limit": {
       "type": "integer",
-      "minimum": 1,
-      "maximum": 2000
+      "minimum": 20,
+      "maximum": 2000,
+      "multipleOf": 20
      },
      "sort_by": {
       "type": "string",

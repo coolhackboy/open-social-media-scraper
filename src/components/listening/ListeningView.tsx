@@ -185,6 +185,15 @@ function MonitorDetail({ m, onEdit }: { m: Monitor; onEdit(): void }) {
             <p className="mt-1 text-[11.5px] text-fg-subtle">
               {m.lastRunAt ? `Last run ${relTime(m.lastRunAt)}${m.lastRunCredits != null ? ` · ${MOCK_MODE ? 'example charge' : 'charged'} ${fmtCredits(m.lastRunCredits)} credits` : ''}` : 'Not run yet'}
             </p>
+            {!!m.lastRunErrors?.length && (
+              <ul className="mt-1.5 space-y-0.5 text-[11.5px] text-bad" aria-label="Failed sources">
+                {m.lastRunErrors.map((e) => (
+                  <li key={`${e.endpointId}|${e.keyword}`} className="break-words">
+                    <span className="font-medium">{findEndpoint(e.endpointId)?.name ?? e.endpointId}</span> · {e.keyword}: {e.message}
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
           <div className="flex items-center gap-1">
             <IconButton label="Edit monitor" onClick={onEdit}>

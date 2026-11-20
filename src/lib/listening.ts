@@ -27,6 +27,8 @@ export interface Monitor {
   /** Run ids of the most recent run. */
   lastRunIds?: string[];
   lastRunCredits?: number;
+  /** Requests of the most recent run that did not succeed, with the API's reason. */
+  lastRunErrors?: { endpointId: string; keyword: string; message: string }[];
 }
 
 export type TriageState = 'open' | 'replied' | 'ignored';
@@ -166,18 +168,23 @@ export async function runMonitor(id: string): Promise<void> {
   let credits = 0;
   let failed = 0;
   const runIds: string[] = [];
+  const errors: NonNullable<Monitor['lastRunErrors']> = [];
   await Promise.all(
     requests.map(async (r) => {
       const runId = startRun(r.endpointId, r.body, { kind: 'listening', ref: id, label: `${m.name} · ${r.keyword}` });
       runIds.push(runId);
       const run = await settled(runId);
       if (run?.status === 'succeeded') added += merge(id, r.endpointId, r.keyword, run.items, runAt);
-      else failed++;
+      else {
+        failed++;
+        errors.push({ endpointId: r.endpointId, keyword: r.keyword, message: run?.error || `Run ${run?.status ?? 'did not finish'}` });
+      }
       credits += run?.credits ?? 0;
       setProgress(++done);
     }),
   );
-  setMonitor({ ...m, lastRunAt: runAt, lastRunIds: runIds, lastRunCredits: Number(credits.toFixed(4)) });
+  const latest = useListening.getState().monitors.find((x) => x.id === id) ?? m;
+  setMonitor({ ...latest, lastRunAt: runAt, lastRunIds: runIds, lastRunCredits: Number(credits.toFixed(4)), lastRunErrors: errors });
   toast(
     `${m.name}: ${added} new item${added === 1 ? '' : 's'}${failed ? `, ${failed} request${failed === 1 ? '' : 's'} failed` : ''}`,
     failed ? 'bad' : 'ok',
